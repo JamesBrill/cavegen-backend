@@ -6,6 +6,17 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder '..', '/cavegen'
   config.vm.synced_folder '~/.aws', '/home/vagrant/.aws'
 
+  config.vm.provision "shell", run: "always", inline: <<-SHELL
+    cat <<-EOF > /etc/profile.d/cavegen.sh
+      export CAVEGEN_ENV=development
+      export DB_HOST=127.0.0.1
+      export DB_PORT=5432
+      export DB_NAME=cavegen
+      export DB_USER=cavegen
+      export DB_PASSWORD=vIw3G5ROoqurfWV2ZiwRbZuF
+EOF
+  SHELL
+
   config.vm.provision 'shell', inline: <<-SHELL
     sudo apt-get update
     sudo apt-get --yes install postgresql postgresql-contrib postgresql-server-dev-all
@@ -15,12 +26,6 @@ Vagrant.configure(2) do |config|
     sudo -u postgres psql -c "ALTER ROLE cavegen SET default_transaction_isolation TO 'read committed';"
     sudo -u postgres psql -c "ALTER ROLE cavegen SET timezone TO 'UTC';"
     sudo apt-get --yes install python-pip python3.4-dev
-    export CAVEGEN_ENV=development
-    export DB_HOST=127.0.0.1
-    export DB_PORT=5432
-    export DB_NAME=cavegen
-    export DB_USER=cavegen
-    export DB_PASSWORD=vIw3G5ROoqurfWV2ZiwRbZuF
     cd /cavegen/backend
     sudo pip install virtualenv
     virtualenv -p /usr/bin/python3.4 lib
