@@ -15,16 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import obtain_jwt_token
-from caves.views import CaveViewSet
-
-# Routers provide an easy way of automatically determining the URL conf.
-router = DefaultRouter()
-router.register(r'caves', CaveViewSet)
+from caves.views import CaveView
 
 urlpatterns = [
-    url(r'^api/', include(router.urls)),
     url(r'^api/auth/', obtain_jwt_token),
+    url(r'^api/caves/(?P<id>[0-9]+)/$', CaveView.as_view()),
     url(r'^admin/', admin.site.urls),
 ]
