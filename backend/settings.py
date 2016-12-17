@@ -27,7 +27,8 @@ SECRET_KEY = '(j*)!8fxw_f1h&l5p&bgqzxg4_-)s5_o#3f=36j_%b9o@&8j_x'
 DEBUG = os.environ.get('CAVEGEN_ENV', None) == 'development'
 
 ALLOWED_HOSTS = [
-    '192.168.31.12'
+    '192.168.31.12',
+    '.elasticbeanstalk.com'
 ]
 
 CORS_ORIGIN_WHITELIST = (
@@ -87,11 +88,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['DB_NAME'],
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': os.environ['DB_HOST'],
-        'PORT': os.environ['DB_PORT'],
+        'NAME': 'cavegen',
+        'USER': 'cavegen',
+        'PASSWORD': 'vIw3G5ROoqurfWV2ZiwRbZuF',
+        'HOST': '127.0.0.1',
+        'PORT': 5432,
     }
 }
 
