@@ -9,11 +9,11 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", run: "always", inline: <<-SHELL
     cat <<-EOF > /etc/profile.d/cavegen.sh
       export CAVEGEN_ENV=development
-      export DB_HOST=127.0.0.1
-      export DB_PORT=5432
-      export DB_NAME=cavegen
-      export DB_USER=cavegen
-      export DB_PASSWORD=vIw3G5ROoqurfWV2ZiwRbZuF
+      export RDS_HOSTNAME=127.0.0.1
+      export RDS_PORT=5432
+      export RDS_DB_NAME=cavegen
+      export RDS_USERNAME=cavegen
+      export RDS_PASSWORD=vIw3G5ROoqurfWV2ZiwRbZuF
 EOF
   SHELL
 
