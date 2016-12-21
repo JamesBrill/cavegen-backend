@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .models import Cave
 from .serializers import CaveSerializer
+from django.http import StreamingHttpResponse
+import os
 
 class CaveView(APIView):
     authentication_classes = ()
@@ -16,8 +18,14 @@ class CaveView(APIView):
 
     def get(self, request, id, format=None):
         cave = self.get_object(id)
-        serializer = CaveSerializer(cave)
-        return Response(serializer.data)
+        file = open('temp.txt', 'w')
+        file.write(cave.text)
+        file.close()
+        file = open('temp.txt', 'r').read()
+        response = StreamingHttpResponse(file)
+        response['Content-Type'] = 'text/plain; charset=utf8'
+        os.remove('temp.txt')
+        return response
 
     def post(self, request, format=None):
         serializer = CaveSerializer(data=request.data)
