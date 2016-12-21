@@ -20,6 +20,7 @@ from caves.views import CaveView
 
 urlpatterns = [
     url(r'^api/auth/', obtain_jwt_token),
+    url(r'^api/caves/$', CaveView.as_view()),
     url(r'^api/caves/(?P<id>[0-9]+)/$', CaveView.as_view()),
     url(r'^admin/', admin.site.urls),
 ]
