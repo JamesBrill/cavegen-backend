@@ -32,7 +32,8 @@ ALLOWED_HOSTS = [
 ]
 
 CORS_ORIGIN_WHITELIST = (
-    'droidfreak36.com'
+    'droidfreak36.com',
+    'localhost:3000'
 )
 
 # Application definition
