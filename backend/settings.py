@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 from datetime import timedelta
+import backend.utils
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,6 +40,7 @@ CORS_ORIGIN_WHITELIST = (
 # Application definition
 
 INSTALLED_APPS = [
+    'authentication.apps.AuthenticationConfig',
     'caves.apps.CavesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -147,6 +149,17 @@ USE_TZ = True
 STATIC_URL = '/_static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# URLS
+if os.environ.get('CAVEGEN_ENV', None) == 'development':
+    _BASE = 'http://localhost:3000/'
+else:
+    _BASE = 'http://cavegen.com/'
+
+EXTERNAL_URLS = {
+    'BASE': _BASE,
+    'BASE_WITH_TOKEN': _BASE + 'login?token={id_token}',
+}
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -154,13 +167,19 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-    ],
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ]
 }
 
 JWT_AUTH = {
+    'JWT_PAYLOAD_GET_USERNAME_HANDLER': 'backend.utils.username_handler',
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
     'JWT_EXPIRATION_DELTA': timedelta(hours=24)
 }
+
+if 'JWT_SECRET_KEY' in os.environ and 'JWT_AUDIENCE' in os.environ:
+    secret_key = os.environ['JWT_SECRET_KEY']
+    JWT_AUTH['JWT_SECRET_KEY'] = secret_key
+    JWT_AUTH['JWT_ENCODED_SECRET_KEY'] = secret_key
+    JWT_AUTH['JWT_AUDIENCE'] = os.environ['JWT_AUDIENCE']
