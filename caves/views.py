@@ -26,6 +26,16 @@ class CaveView(APIView):
         os.remove('temp.txt')
         return response
 
+    def put(self, request, id, format=None):
+        cave = self.get_object(id)
+        if request.user.username != cave.author.username:
+            return Response({'error': 'You are not authorized to access this cave.'}, status=status.HTTP_403_FORBIDDEN)
+        serializer = CaveSerializer(cave, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def post(self, request, format=None):
         data = request.data
         data['author'] = request.user.id
