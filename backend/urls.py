@@ -13,6 +13,6 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^api/auth/', get_token),
     url(r'^api/caves/$', CaveView.as_view()),
-    url(r'^api/caves/(?P<id>[0-9]+)/$', CaveView.as_view()),
+    url(r'^api/caves/(?P<uuid>[0-9a-z\-]+)/$', CaveView.as_view()),
     url(r'^api-token-verify/', verify_jwt_token),
 ]

@@ -7,14 +7,14 @@ from django.http import StreamingHttpResponse
 import os
 
 class CaveView(APIView):
-    def get_object(self, id):
+    def get_object(self, uuid):
         try:
-            return Cave.objects.get(id=id)
+            return Cave.objects.get(uuid=uuid)
         except Cave.DoesNotExist:
             raise Http404
 
-    def get(self, request, id, format=None):
-        cave = self.get_object(id)
+    def get(self, request, uuid, format=None):
+        cave = self.get_object(uuid)
         if request.user.username != cave.author.username:
             return Response({'error': 'You are not authorized to access this cave.'}, status=status.HTTP_403_FORBIDDEN)
         file = open('temp.txt', 'w')
@@ -26,8 +26,8 @@ class CaveView(APIView):
         os.remove('temp.txt')
         return response
 
-    def put(self, request, id, format=None):
-        cave = self.get_object(id)
+    def put(self, request, uuid, format=None):
+        cave = self.get_object(uuid)
         if request.user.username != cave.author.username:
             return Response({'error': 'You are not authorized to access this cave.'}, status=status.HTTP_403_FORBIDDEN)
         serializer = CaveSerializer(cave, data=request.data)
