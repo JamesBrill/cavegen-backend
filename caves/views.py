@@ -15,6 +15,8 @@ class CaveView(APIView):
 
     def get(self, request, id, format=None):
         cave = self.get_object(id)
+        if request.user.username != cave.author.username:
+            return Response({'error': 'You are not authorized to access this cave.'}, status=status.HTTP_403_FORBIDDEN)
         file = open('temp.txt', 'w')
         file.write(cave.text)
         file.close()
