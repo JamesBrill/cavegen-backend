@@ -1,6 +1,7 @@
 /lib
 static/
 __pycache__/
+*.pyc
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
