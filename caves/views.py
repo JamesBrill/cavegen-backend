@@ -7,9 +7,6 @@ from django.http import StreamingHttpResponse
 import os
 
 class CaveView(APIView):
-    authentication_classes = ()
-    permission_classes = ()
-
     def get_object(self, id):
         try:
             return Cave.objects.get(id=id)
