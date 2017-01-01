@@ -4,4 +4,4 @@ from .models import Cave
 class CaveSerializer(ModelSerializer):
     class Meta:
         model = Cave
-        fields = ('id', 'uuid', 'text', 'author')
+        fields = ('id', 'name', 'uuid', 'text', 'author')
