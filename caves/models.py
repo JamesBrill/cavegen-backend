@@ -10,5 +10,5 @@ class Cave(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.name:
-            self.name = 'Untitled ' + str(self.uuid)
+            self.name = 'Untitled'
         super(Cave, self).save(*args, **kwargs)
