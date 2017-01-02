@@ -88,6 +88,13 @@ def get_token(request):
     elif 'last_name' in v2_info:
         data['last_name'] = v2_info['last_name']
 
+    if 'name' in v2_info:
+        data['userprofile']['display_name'] = v2_info['name']
+    elif 'nickname' in v2_info:
+        data['userprofile']['display_name'] = v2_info['nickname']
+    else:
+        data['userprofile']['display_name'] = 'anonymous'
+
     query_set = UserProxy.objects.filter(email=data['email'])
     if query_set.count() == 0:
         profile = data.pop('userprofile')

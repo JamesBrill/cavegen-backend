@@ -30,6 +30,7 @@ class UserProxy(User):
         if 'refresh_token' in userprofile:
             self.userprofile.refresh_token = userprofile['refresh_token']
         self.userprofile.picture = userprofile['picture']
+        self.userprofile.display_name = userprofile['display_name']
         self.userprofile.save()
         self.save()
         return self
@@ -40,6 +41,7 @@ class UserProxy(User):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.CharField(max_length=200, default='')
+    display_name = models.CharField(max_length=50, default='anonymous')
 
     def __str__(self):
         return self.user.email
