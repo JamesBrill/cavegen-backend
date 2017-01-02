@@ -1,10 +1,11 @@
 from django.conf import settings
 from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from .models import UserProxy
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserProfileSerializer
 
 import json
 import requests
@@ -105,3 +106,24 @@ def get_token(request):
     formattedRedirectUrl = redirectUrl.format(id_token=token_info['id_token'])
     headers = {'Location': formattedRedirectUrl, 'content-type': 'text/plain'}
     return Response('redirecting to ' + formattedRedirectUrl, headers=headers, status=status.HTTP_302_FOUND)
+
+class UserProfileView(APIView):
+    def get_object(self, username):
+        try:
+            return UserProxy.objects.get(username=username)
+        except UserProxy.DoesNotExist:
+            raise Http404
+
+    def get(self, request, format=None):
+        user = self.get_object(request.user.username)
+        serializer = UserProfileSerializer(user.userprofile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, format=None):
+        user = self.get_object(request.user.username)
+        userprofile = user.userprofile
+        serializer = UserProfileSerializer(userprofile, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
