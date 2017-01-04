@@ -7,6 +7,7 @@ class Cave(models.Model):
     name = models.CharField(max_length=256, null=True)
     text = models.TextField()
     author = models.ForeignKey(User, default=1)
+    is_public = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.name:
