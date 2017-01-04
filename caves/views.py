@@ -51,3 +51,9 @@ def get_my_caves(request):
     queryset = Cave.objects.filter(author=request.user.id)
     serializer = CaveSerializer(queryset, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_public_caves(request):
+    queryset = Cave.objects.filter(is_public=True)
+    serializer = CaveSerializer(queryset, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
