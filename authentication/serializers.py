@@ -3,9 +3,11 @@ from .models import UserProfile
 from rest_framework import serializers
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
+
     class Meta:
         model = UserProfile
-        fields = ('picture', 'display_name')
+        fields = ('user_id', 'picture', 'display_name')
 
 class UserSerializer(serializers.ModelSerializer):
     userprofile = UserProfileSerializer()
