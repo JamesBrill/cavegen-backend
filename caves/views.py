@@ -6,6 +6,7 @@ from .models import Cave
 from .serializers import CaveSerializer
 from django.http import StreamingHttpResponse
 import os
+import uuid
 
 class CaveView(APIView):
     def get_object(self, uuid):
@@ -14,17 +15,21 @@ class CaveView(APIView):
         except Cave.DoesNotExist:
             raise Http404
 
+    def get_random_file_name(self):
+        return str(uuid.uuid4()) + '.txt'
+
     def get(self, request, uuid, format=None):
         cave = self.get_object(uuid)
         if request.user.username != cave.author.username:
             return Response({'error': 'You are not authorized to access this cave.'}, status=status.HTTP_403_FORBIDDEN)
-        file = open('temp.txt', 'w')
+        random_file_name = self.get_random_file_name()
+        file = open(random_file_name, 'w')
         file.write(cave.text)
         file.close()
-        file = open('temp.txt', 'r').read()
+        file = open(random_file_name, 'r').read()
         response = StreamingHttpResponse(file)
         response['Content-Type'] = 'text/plain; charset=utf8'
-        os.remove('temp.txt')
+        os.remove(random_file_name)
         return response
 
     def put(self, request, uuid, format=None):
