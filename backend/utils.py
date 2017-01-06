@@ -7,7 +7,11 @@ def hash_email(email):
     return hash_string[2:]
 
 def username_handler(payload):
-    username = hash_email(payload.get('email'))
+    if payload.get('email') is None:
+        email = payload.get('sub')
+    else:
+        email = payload.get('email')
+    username = hash_email(email)
     if 'email_verified' in payload and not payload['email_verified']:
         username = None
     return username

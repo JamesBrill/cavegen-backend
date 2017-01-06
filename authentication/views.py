@@ -71,13 +71,17 @@ def get_token(request):
 
     json_header['Authorization'] = 'Bearer ' + token_info['id_token']
     v2_info = requests.get(v2_url, headers=json_header).json()
-
     data = {
-        'email': v2_info['email'],
         'userprofile': {
             'picture': v2_info['picture']
         }
     }
+
+    if 'email' in v2_info:
+        data['email'] = v2_info['email']
+    else:
+        # This is bad, but gets us a username for JWT auth for now
+        data['email'] = v2_info['user_id']
 
     if 'given_name' in v2_info:
         data['first_name'] = v2_info['given_name']
