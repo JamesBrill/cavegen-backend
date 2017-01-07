@@ -29,10 +29,12 @@ DEBUG = os.environ.get('CAVEGEN_ENV', None) == 'development'
 
 ALLOWED_HOSTS = [
     '192.168.31.12',
-    '.elasticbeanstalk.com'
+    '.elasticbeanstalk.com',
+    '.cavegen.com'
 ]
 
 CORS_ORIGIN_WHITELIST = (
+    'cavegen.com',
     'droidfreak36.com',
     'localhost:3000'
 )
