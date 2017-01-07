@@ -1,12 +1,14 @@
+from django.conf import settings
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from .models import Cave
 from .serializers import CaveSerializer
 from django.http import StreamingHttpResponse
 import os
-import uuid
+from backend.utils import get_random_file_name
 
 class CaveView(APIView):
     def get_object(self, uuid):
@@ -15,14 +17,11 @@ class CaveView(APIView):
         except Cave.DoesNotExist:
             raise Http404
 
-    def get_random_file_name(self):
-        return str(uuid.uuid4()) + '.txt'
-
     def get(self, request, uuid, format=None):
         cave = self.get_object(uuid)
         if request.user.username != cave.author.username:
             return Response({'error': 'You are not authorized to access this cave.'}, status=status.HTTP_403_FORBIDDEN)
-        random_file_name = self.get_random_file_name()
+        random_file_name = get_random_file_name()
         file = open(random_file_name, 'w')
         file.write(cave.text)
         file.close()
@@ -67,3 +66,18 @@ def get_public_caves(request):
     queryset = Cave.objects.filter(is_public=True)
     serializer = CaveSerializer(queryset, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes((AllowAny,))
+@authentication_classes(())
+def reborn_backdoor(request, uuid): # TODO: Reborn needs to use this!
+    cave = Cave.objects.get(uuid=uuid)
+    random_file_name = get_random_file_name()
+    file = open(random_file_name, 'w')
+    file.write(cave.text)
+    file.close()
+    file = open(random_file_name, 'r').read()
+    response = StreamingHttpResponse(file)
+    response['Content-Type'] = 'text/plain; charset=utf8'
+    os.remove(random_file_name)
+    return response

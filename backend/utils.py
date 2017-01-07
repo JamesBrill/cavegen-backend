@@ -1,5 +1,6 @@
 import base64
 import hashlib
+import uuid
 
 def hash_email(email):
     hash_object = hashlib.md5(email.encode('utf-8'))
@@ -18,3 +19,6 @@ def username_handler(payload):
 
 def decode_secret(secret):
     return base64.b64decode(secret.replace("_", "/").replace("-", "+"))
+
+def get_random_file_name():
+    return str(uuid.uuid4()) + '.txt'
