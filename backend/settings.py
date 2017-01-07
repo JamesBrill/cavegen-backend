@@ -185,3 +185,5 @@ if 'JWT_SECRET_KEY' in os.environ and 'JWT_AUDIENCE' in os.environ:
     JWT_AUTH['JWT_SECRET_KEY'] = secret_key
     JWT_AUTH['JWT_ENCODED_SECRET_KEY'] = secret_key
     JWT_AUTH['JWT_AUDIENCE'] = os.environ['JWT_AUDIENCE']
+
+PERSONAL_CAVE_LIMIT = 250

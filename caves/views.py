@@ -43,6 +43,11 @@ class CaveView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, format=None):
+        number_of_existing_caves = Cave.objects.filter(author=request.user.id).count()
+        if number_of_existing_caves >= settings.PERSONAL_CAVE_LIMIT:
+            return Response({ 'error': 'Personal cave limit of ' + \
+                str(settings.PERSONAL_CAVE_LIMIT) + ' has been reached.' }, \
+                status=status.HTTP_403_FORBIDDEN)
         data = request.data
         data['author'] = request.user.id
         serializer = CaveSerializer(data=data)
