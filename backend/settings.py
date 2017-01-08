@@ -188,6 +188,7 @@ if 'JWT_SECRET_KEY' in os.environ and 'JWT_AUDIENCE' in os.environ:
 
 PERSONAL_CAVE_LIMIT = 250
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+if os.environ.get('CAVEGEN_ENV', None) == 'production':
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
