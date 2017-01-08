@@ -70,7 +70,7 @@ def get_public_caves(request):
 @api_view(['GET'])
 @permission_classes((AllowAny,))
 @authentication_classes(())
-def reborn_backdoor(request, uuid): # TODO: Reborn needs to use this!
+def reborn_backdoor(request, uuid):
     cave = Cave.objects.get(uuid=uuid)
     random_file_name = get_random_file_name()
     file = open(random_file_name, 'w')
