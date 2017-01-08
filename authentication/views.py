@@ -46,7 +46,10 @@ def get_token(request):
 
     token_url = "https://{domain}/oauth/token".format(domain='cavegen-app.auth0.com')
 
-    uri = 'http://' + request.get_host()
+    if settings.DEBUG == True:
+        uri = 'http://' + request.get_host()
+    else:
+        uri = 'https://' + request.get_host()
 
     token_payload = {
         'audience': 'https://cavegen-app.auth0.com/api/v2/',
