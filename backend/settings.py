@@ -155,7 +155,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 if os.environ.get('CAVEGEN_ENV', None) == 'development':
     _BASE = 'http://localhost:3000/'
 else:
-    _BASE = 'http://cavegen.com/'
+    _BASE = 'https://cavegen.com/'
 
 EXTERNAL_URLS = {
     'BASE': _BASE,
