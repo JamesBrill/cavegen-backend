@@ -44,4 +44,4 @@ class UserProfile(models.Model):
     display_name = models.CharField(max_length=50, default='anonymous')
 
     def __str__(self):
-        return self.user.email
+        return self.display_name
