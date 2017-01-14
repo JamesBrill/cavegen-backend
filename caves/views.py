@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db.models import F
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -66,6 +67,20 @@ def get_public_caves(request):
     queryset = Cave.objects.filter(is_public=True)
     serializer = CaveSerializer(queryset, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def like_cave(request, uuid):
+    cave = Cave.objects.get(uuid=uuid)
+    liking_user = request.user
+    if liking_user.username == cave.author.username:
+        return Response({'error': 'You can\'t like your own cave.'}, status=status.HTTP_403_FORBIDDEN)
+    liked_caves = liking_user.userprofile.liked_caves
+    if len(liked_caves.filter(uuid=uuid)) != 0:
+        return Response({'error': 'You\'ve already liked this cave.'}, status=status.HTTP_403_FORBIDDEN)
+    liking_user.userprofile.liked_caves.add(cave)
+    cave.likes = F('likes') + 1
+    cave.save()
+    return Response({'message': 'Cave liked.'}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 @permission_classes((AllowAny,))
