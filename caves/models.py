@@ -10,6 +10,7 @@ class Cave(models.Model):
     author = models.ForeignKey(User, default=1)
     is_public = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
+    likes = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
         if not self.name:

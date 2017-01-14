@@ -3,8 +3,8 @@ from .models import Cave
 
 
 class CaveAdmin(admin.ModelAdmin):
-    fields = ['uuid', 'name', 'text', 'author', 'date_created']
-    list_display = ['uuid', 'name', 'text', 'author', 'date_created', 'get_author_name']
+    fields = ['uuid', 'name', 'text', 'author', 'date_created', 'likes']
+    list_display = ['uuid', 'name', 'text', 'author', 'date_created', 'get_author_name', 'likes']
     readonly_fields = ('date_created',)
     search_fields = ['name', 'author__email']
 
