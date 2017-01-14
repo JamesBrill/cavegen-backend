@@ -16,3 +16,6 @@ class Cave(models.Model):
         if not self.name:
             self.name = 'Untitled'
         super(Cave, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name

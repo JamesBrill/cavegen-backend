@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from urllib.parse import urlencode
 from backend.utils import hash_email
+from caves.models import Cave
 import hashlib
 import requests
 
@@ -42,6 +43,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.CharField(max_length=200, default='')
     display_name = models.CharField(max_length=50, default='anonymous')
+    liked_caves = models.ManyToManyField(Cave)
 
     def __str__(self):
         return self.display_name
