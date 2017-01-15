@@ -43,7 +43,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.CharField(max_length=200, default='')
     display_name = models.CharField(max_length=50, default='anonymous')
-    liked_caves = models.ManyToManyField(Cave)
+    liked_caves = models.ManyToManyField(Cave, blank=True)
 
     def __str__(self):
         return self.display_name
