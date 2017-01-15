@@ -78,9 +78,10 @@ def like_cave(request, uuid):
     if len(liked_caves.filter(uuid=uuid)) != 0:
         return Response({'error': 'You\'ve already liked this cave.'}, status=status.HTTP_403_FORBIDDEN)
     liking_user.userprofile.liked_caves.add(cave)
-    cave.likes = F('likes') + 1
+    cave.likes = cave.likes + 1 # Prone to race condition, but at least I can serialize the cave now
     cave.save()
-    return Response({'message': 'Cave liked.'}, status=status.HTTP_200_OK)
+    serializer = CaveSerializer(cave)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 @permission_classes((AllowAny,))
