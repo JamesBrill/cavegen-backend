@@ -2,6 +2,7 @@
 static/
 __pycache__/
 *.pyc
+.vagrant/
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
